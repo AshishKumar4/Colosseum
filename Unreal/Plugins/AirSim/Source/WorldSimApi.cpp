@@ -7,6 +7,7 @@
 #include "DrawDebugHelpers.h"
 #include "Runtime/Engine/Classes/Components/LineBatchComponent.h"
 #include "Runtime/Engine/Classes/Engine/Engine.h"
+#include "Engine/BlueprintGeneratedClass.h"
 #include "Misc/OutputDeviceNull.h"
 #include "ImageUtils.h"
 #include <cstdlib>
@@ -93,7 +94,7 @@ std::string WorldSimApi::spawnObject(const std::string& object_name, const std::
     FString asset_name(load_object.c_str());
     FAssetData* load_asset = simmode_->asset_map.Find(asset_name);
 
-    if (!load_asset->IsValid()) {
+    if (!load_asset || !load_asset->IsValid()) {
         throw std::invalid_argument("There were no objects with name " + load_object + " found in the Registry");
     }
 
@@ -120,10 +121,45 @@ std::string WorldSimApi::spawnObject(const std::string& object_name, const std::
         FActorSpawnParameters new_actor_spawn_params;
         new_actor_spawn_params.Name = FName(final_object_name.c_str());
 
-        AActor* NewActor;
+        AActor* NewActor = nullptr;
         if (is_blueprint) {
-            UBlueprint* LoadObject = Cast<UBlueprint>(load_asset->GetAsset());
-            NewActor = this->createNewBPActor(new_actor_spawn_params, actor_transform, scale, LoadObject);
+            UObject* LoadedAsset = load_asset->GetAsset();
+            UClass* SpawnClass = nullptr;
+
+            // Log asset info for debugging
+            UE_LOG(LogTemp, Log, TEXT("[AirSim] Spawning blueprint: %s"), *FString(final_object_name.c_str()));
+            if (LoadedAsset) {
+                UE_LOG(LogTemp, Log, TEXT("[AirSim] Asset class: %s"), *LoadedAsset->GetClass()->GetName());
+            } else {
+                UE_LOG(LogTemp, Error, TEXT("[AirSim] GetAsset() returned nullptr!"));
+            }
+
+            // Try UBlueprint first (editor builds)
+            if (UBlueprint* Blueprint = Cast<UBlueprint>(LoadedAsset)) {
+                UE_LOG(LogTemp, Log, TEXT("[AirSim] Cast to UBlueprint succeeded"));
+                SpawnClass = Blueprint->GeneratedClass;
+            }
+            // Try UBlueprintGeneratedClass (packaged builds)
+            else if (UBlueprintGeneratedClass* BPClass = Cast<UBlueprintGeneratedClass>(LoadedAsset)) {
+                UE_LOG(LogTemp, Log, TEXT("[AirSim] Cast to UBlueprintGeneratedClass succeeded"));
+                SpawnClass = BPClass;
+            }
+            else {
+                UE_LOG(LogTemp, Error, TEXT("[AirSim] Asset is neither UBlueprint nor UBlueprintGeneratedClass!"));
+            }
+
+            if (SpawnClass) {
+                UE_LOG(LogTemp, Log, TEXT("[AirSim] SpawnClass: %s"), *SpawnClass->GetName());
+                NewActor = simmode_->GetWorld()->SpawnActor<AActor>(SpawnClass, FVector::ZeroVector, FRotator::ZeroRotator, new_actor_spawn_params);
+                if (NewActor) {
+                    NewActor->SetActorLocationAndRotation(actor_transform.GetLocation(), actor_transform.GetRotation(), false, nullptr, ETeleportType::TeleportPhysics);
+                    UE_LOG(LogTemp, Log, TEXT("[AirSim] Blueprint actor spawned successfully: %s"), *NewActor->GetName());
+                } else {
+                    UE_LOG(LogTemp, Error, TEXT("[AirSim] SpawnActor returned nullptr!"));
+                }
+            } else {
+                UE_LOG(LogTemp, Error, TEXT("[AirSim] SpawnClass is nullptr, cannot spawn blueprint actor"));
+            }
         }
         else {
             UStaticMesh* LoadObject = dynamic_cast<UStaticMesh*>(load_asset->GetAsset());
@@ -135,7 +171,9 @@ std::string WorldSimApi::spawnObject(const std::string& object_name, const std::
             simmode_->scene_object_map.Add(FString(final_object_name.c_str()), NewActor);
         }
 
-        UAirBlueprintLib::setSimulatePhysics(NewActor, physics_enabled);
+        if (NewActor) {
+            UAirBlueprintLib::setSimulatePhysics(NewActor, physics_enabled);
+        }
     },
                                              true);
 
@@ -790,7 +828,8 @@ bool WorldSimApi::testLineOfSightBetweenPoints(const msr::airlib::GeoPoint& lla1
                 color = FLinearColor{ 0, 1.0f, 0, 0.4f };
             }
 
-            simmode_->GetWorld()->PersistentLineBatcher->DrawLine(point1, point2, color, SDPG_World, 4, 999999);
+            // UE 5.6+ removed PersistentLineBatcher, use DrawDebugLine instead
+            DrawDebugLine(simmode_->GetWorld(), point1, point2, color.ToFColor(true), true, 999999.0f, SDPG_World, 4.0f);
         }
     },
                                              true);

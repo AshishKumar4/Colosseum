@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "5.4",
+	"EngineAssociation": "{639EAA20-8754-463E-84A6-D65865374C72}",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -8,16 +8,16 @@
 			"Name": "BlocksV2",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
-            "AdditionalDependencies": [
-                "AirSim"
-            ]
+			"AdditionalDependencies": [
+				"AirSim"
+			]
 		}
 	],
 	"Plugins": [
 		{
-            "Name": "AirSim",
-            "Enabled": true
-        },
+			"Name": "AirSim",
+			"Enabled": true
+		},
 		{
 			"Name": "ModelingToolsEditorMode",
 			"Enabled": true,

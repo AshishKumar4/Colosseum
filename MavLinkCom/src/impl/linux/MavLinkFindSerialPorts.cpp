@@ -8,8 +8,6 @@
 #include <iostream>
 #include <memory>
 #include <sstream>
-#include <locale>
-#include <codecvt>
 
 using namespace mavlinkcom;
 using namespace mavlinkcom_impl;
@@ -47,14 +45,12 @@ std::vector<SerialPortInfo> MavLinkConnection::findSerialPorts(int vid, int pid)
     {
         std::stringstream ss(command_result);
         std::string port_name, display_name;
-        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-
         while (std::getline(ss, port_name, ' ') && std::getline(ss, display_name)) {
             SerialPortInfo portInfo;
             portInfo.pid = 0;
             portInfo.vid = 0;
-            portInfo.displayName = converter.from_bytes(display_name);
-            portInfo.portName = converter.from_bytes(port_name);
+            portInfo.displayName.assign(display_name.begin(), display_name.end());
+            portInfo.portName.assign(port_name.begin(), port_name.end());
 
             ports.push_back(portInfo);
         }

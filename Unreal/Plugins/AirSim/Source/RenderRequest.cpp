@@ -100,10 +100,12 @@ void RenderRequest::getScreenshot(std::shared_ptr<RenderParams> params[], std::v
         }
     }
 
+    // Synchronous compression - required for shared memory optimization to work
+    // (Data must be complete before UnrealImageCapture accesses it)
     for (unsigned int i = 0; i < req_size; ++i) {
         if (!params[i]->pixels_as_float) {
             if (results[i]->width != 0 && results[i]->height != 0) {
-                results[i]->image_data_uint8.SetNumUninitialized(results[i]->width * results[i]->height * 3, false);
+                results[i]->image_data_uint8.SetNumUninitialized(results[i]->width * results[i]->height * 3, EAllowShrinking::No);
                 if (params[i]->compress)
                     UAirBlueprintLib::CompressImageArray(results[i]->width, results[i]->height, results[i]->bmp, results[i]->image_data_uint8);
                 else {
@@ -117,7 +119,7 @@ void RenderRequest::getScreenshot(std::shared_ptr<RenderParams> params[], std::v
             }
         }
         else {
-            results[i]->image_data_float.SetNumUninitialized(results[i]->width * results[i]->height);
+            results[i]->image_data_float.SetNumUninitialized(results[i]->width * results[i]->height, EAllowShrinking::No);
             float* ptr = results[i]->image_data_float.GetData();
             for (const auto& item : results[i]->bmp_float) {
                 *ptr++ = item.R.GetFloat();
@@ -131,6 +133,16 @@ FReadSurfaceDataFlags RenderRequest::setupRenderResource(const FTextureRenderTar
     size = rt_resource->GetSizeXY();
     result->width = size.X;
     result->height = size.Y;
+
+    // Preallocate pixel buffers to avoid reallocation overhead
+    int pixel_count = size.X * size.Y;
+    if (!params->pixels_as_float) {
+        result->bmp.Reserve(pixel_count);
+    }
+    else {
+        result->bmp_float.Reserve(pixel_count);
+    }
+
     FReadSurfaceDataFlags flags(RCM_UNorm, CubeFace_MAX);
     flags.SetLinearToGamma(false);
 
@@ -140,36 +152,55 @@ FReadSurfaceDataFlags RenderRequest::setupRenderResource(const FTextureRenderTar
 void RenderRequest::ExecuteTask()
 {
     if (params_ != nullptr && req_size_ > 0) {
+        FRHICommandListImmediate& RHICmdList = GetImmediateCommandList_ForRenderCommand();
+
+        // Batch setup phase - prepare all render resources
+        TArray<FTexture2DRHIRef> Textures;
+        TArray<FIntPoint> Sizes;
+        TArray<FReadSurfaceDataFlags> FlagsArray;
+
+        Textures.Reserve(req_size_);
+        Sizes.Reserve(req_size_);
+        FlagsArray.Reserve(req_size_);
+
         for (unsigned int i = 0; i < req_size_; ++i) {
-            FRHICommandListImmediate& RHICmdList = GetImmediateCommandList_ForRenderCommand();
             auto rt_resource = params_[i]->render_target->GetRenderTargetResource();
             if (rt_resource != nullptr) {
-                const FTexture2DRHIRef& rhi_texture = rt_resource->GetRenderTargetTexture();
+                Textures.Add(rt_resource->GetRenderTargetTexture());
+
                 FIntPoint size;
                 auto flags = setupRenderResource(rt_resource, params_[i].get(), results_[i].get(), size);
+                Sizes.Add(size);
+                FlagsArray.Add(flags);
+            }
+            else {
+                Textures.Add(nullptr);
+                Sizes.Add(FIntPoint::ZeroValue);
+                FlagsArray.Add(FReadSurfaceDataFlags());
+            }
+        }
 
-                //should we be using ENQUEUE_UNIQUE_RENDER_COMMAND_ONEPARAMETER which was in original commit by @saihv
-                //https://github.com/Microsoft/AirSim/pull/162/commits/63e80c43812300a8570b04ed42714a3f6949e63f#diff-56b790f9394f7ca1949ddbb320d8456fR64
+        // Batch readback phase - minimize GPU stalls
+        for (unsigned int i = 0; i < req_size_; ++i) {
+            if (Textures[i].IsValid()) {
                 if (!params_[i]->pixels_as_float) {
-                    //below is undocumented method that avoids flushing, but it seems to segfault every 2000 or so calls
                     RHICmdList.ReadSurfaceData(
-                        rhi_texture,
-                        FIntRect(0, 0, size.X, size.Y),
+                        Textures[i],
+                        FIntRect(0, 0, Sizes[i].X, Sizes[i].Y),
                         results_[i]->bmp,
-                        flags);
+                        FlagsArray[i]);
                 }
                 else {
                     RHICmdList.ReadSurfaceFloatData(
-                        rhi_texture,
-                        FIntRect(0, 0, size.X, size.Y),
+                        Textures[i],
+                        FIntRect(0, 0, Sizes[i].X, Sizes[i].Y),
                         results_[i]->bmp_float,
                         CubeFace_PosX,
                         0,
                         0);
                 }
+                results_[i]->time_stamp = msr::airlib::ClockFactory::get()->nowNanos();
             }
-
-            results_[i]->time_stamp = msr::airlib::ClockFactory::get()->nowNanos();
         }
 
         req_size_ = 0;

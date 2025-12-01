@@ -51,6 +51,8 @@ private:
     FDelegateHandle end_draw_handle_;
     std::function<void()> query_camera_pose_cb_;
 
+    bool use_safe_method_;
+
 public:
     RenderRequest(UGameViewportClient* game_viewport, std::function<void()>&& query_camera_pose_cb);
     ~RenderRequest();

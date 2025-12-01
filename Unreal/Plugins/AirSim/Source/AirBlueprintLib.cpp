@@ -27,6 +27,7 @@
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "DetectionComponent.h"
 #include "CineCameraComponent.h"
+#include "Engine/BlueprintGeneratedClass.h"
 
 /*
 //TODO: change naming conventions to same as other files?
@@ -242,7 +243,15 @@ void UAirBlueprintLib::GenerateAssetRegistryMap(const UObject* context, TMap<FSt
         FARFilter Filter;
         Filter.ClassPaths.Add(UStaticMesh::StaticClass()->GetClassPathName());
         Filter.ClassPaths.Add(UBlueprint::StaticClass()->GetClassPathName());
+        // In packaged builds, blueprints are cooked as UBlueprintGeneratedClass
+        Filter.ClassPaths.Add(UBlueprintGeneratedClass::StaticClass()->GetClassPathName());
         Filter.bRecursivePaths = true;
+
+        // Log the filter class paths for debugging
+        UE_LOG(LogTemp, Log, TEXT("[AirSim] GenerateAssetRegistryMap: Filtering for class paths:"));
+        for (const FTopLevelAssetPath& ClassPath : Filter.ClassPaths) {
+            UE_LOG(LogTemp, Log, TEXT("[AirSim]   - %s"), *ClassPath.ToString());
+        }
 
         auto world = context->GetWorld();
         TArray<FAssetData> AssetData;
@@ -251,11 +260,43 @@ void UAirBlueprintLib::GenerateAssetRegistryMap(const UObject* context, TMap<FSt
         FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
         AssetRegistryModule.Get().GetAssets(Filter, AssetData);
 
+        UE_LOG(LogTemp, Log, TEXT("[AirSim] GenerateAssetRegistryMap: Found %d assets total"), AssetData.Num());
+
         UObject* LoadObject = NULL;
+        int32 BlueprintCount = 0;
+        int32 StaticMeshCount = 0;
+        int32 BlueprintGenClassCount = 0;
+
         for (const auto& asset : AssetData) {
             FString asset_name = asset.AssetName.ToString();
+            FString asset_class = asset.AssetClassPath.ToString();
             asset_map.Add(asset_name, asset);
+
+            // For BlueprintGeneratedClass assets (which have _C suffix in packaged builds),
+            // also register WITHOUT the _C suffix so Python can find them by blueprint name
+            // e.g., BP_RedMarker_C is also registered as BP_RedMarker
+            if (asset_name.EndsWith(TEXT("_C"))) {
+                FString asset_name_without_c = asset_name.LeftChop(2);  // Remove "_C"
+                if (!asset_map.Contains(asset_name_without_c)) {
+                    asset_map.Add(asset_name_without_c, asset);
+                    UE_LOG(LogTemp, Log, TEXT("[AirSim]   Also registered as: %s"), *asset_name_without_c);
+                }
+            }
+
+            // Count by type and log blueprints specifically
+            if (asset_class.Contains(TEXT("Blueprint"))) {
+                BlueprintCount++;
+                UE_LOG(LogTemp, Log, TEXT("[AirSim]   Blueprint: %s (class: %s)"), *asset_name, *asset_class);
+            } else if (asset_class.Contains(TEXT("StaticMesh"))) {
+                StaticMeshCount++;
+            } else if (asset_class.Contains(TEXT("BlueprintGeneratedClass"))) {
+                BlueprintGenClassCount++;
+                UE_LOG(LogTemp, Log, TEXT("[AirSim]   BlueprintGeneratedClass: %s (class: %s)"), *asset_name, *asset_class);
+            }
         }
+
+        UE_LOG(LogTemp, Log, TEXT("[AirSim] GenerateAssetRegistryMap: Summary - %d StaticMesh, %d Blueprint, %d BlueprintGeneratedClass"),
+            StaticMeshCount, BlueprintCount, BlueprintGenClassCount);
 
         LogMessageString("Asset database ready", "!", LogDebugLevel::Informational);
     },
@@ -789,38 +830,26 @@ UClass* UAirBlueprintLib::LoadClass(const std::string& name)
 
 void UAirBlueprintLib::CompressImageArray(int32 width, int32 height, const TArray<FColor>& src, TArray<uint8>& dest)
 {
-    TArray<FColor> MutableSrcData = src;
-
-    // PNGs are saved as RGBA but FColors are stored as BGRA. An option to swap the order upon compression may be added at
-    // some point. At the moment, manually swapping Red and Blue
-    for (int32 Index = 0; Index < width * height; Index++) {
-        uint8 TempRed = MutableSrcData[Index].R;
-        MutableSrcData[Index].R = MutableSrcData[Index].B;
-        MutableSrcData[Index].B = TempRed;
-    }
-
-    FObjectThumbnail TempThumbnail;
-    TempThumbnail.SetImageSize(width, height);
-    TArray<uint8>& ThumbnailByteArray = TempThumbnail.AccessImageData();
-
-    // Copy scaled image into destination thumb
-    int32 MemorySize = width * height * sizeof(FColor);
-    ThumbnailByteArray.AddUninitialized(MemorySize);
-    FMemory::Memcpy(ThumbnailByteArray.GetData(), MutableSrcData.GetData(), MemorySize);
-
-    // Compress data - convert into a .png
-    CompressUsingImageWrapper(ThumbnailByteArray, width, height, dest);
-    ;
+    // Use BGRA format directly - FColor is BGRA native, no pixel swap needed
+    CompressUsingImageWrapper(src, width, height, dest);
 }
 
-bool UAirBlueprintLib::CompressUsingImageWrapper(const TArray<uint8>& uncompressed, const int32 width, const int32 height, TArray<uint8>& compressed)
+bool UAirBlueprintLib::CompressUsingImageWrapper(const TArray<FColor>& uncompressed_colors, const int32 width, const int32 height, TArray<uint8>& compressed)
 {
     bool bSucceeded = false;
     compressed.Reset();
-    if (uncompressed.Num() > 0) {
+    if (uncompressed_colors.Num() > 0) {
         IImageWrapperModule* ImageWrapperModule = UAirBlueprintLib::getImageWrapperModule();
         TSharedPtr<IImageWrapper> ImageWrapper = ImageWrapperModule->CreateImageWrapper(EImageFormat::PNG);
-        if (ImageWrapper.IsValid() && ImageWrapper->SetRaw(&uncompressed[0], uncompressed.Num(), width, height, ERGBFormat::RGBA, 8)) {
+
+        // Use BGRA format (FColor native) to avoid pixel conversion
+        if (ImageWrapper.IsValid() && ImageWrapper->SetRaw(
+            &uncompressed_colors[0],
+            uncompressed_colors.Num() * sizeof(FColor),
+            width,
+            height,
+            ERGBFormat::BGRA,
+            8)) {
             compressed = ImageWrapper->GetCompressed();
             bSucceeded = true;
         }
