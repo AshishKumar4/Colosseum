@@ -152,7 +152,8 @@ void ASimHUD::createMainWidget()
     //create main widget
     if (widget_class_ != nullptr) {
         APlayerController* player_controller = this->GetWorld()->GetFirstPlayerController();
-        auto* pawn = player_controller->GetPawn();
+        // UE 5.6: TObjectPtr requires explicit conversion
+        APawn* pawn = player_controller->GetPawn().Get();
         if (pawn) {
             std::string pawn_name = std::string(TCHAR_TO_ANSI(*pawn->GetName()));
             Utils::log(pawn_name);

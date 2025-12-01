@@ -402,3 +402,9 @@ PythonClient/docs/_build
 
 # clangd generated folder, for e.g. from VSCode clangd extension
 .cache/
+pak/
+*.pak
+Unreal/Environments/ElectricDreamsEnv2/
+Unreal/Environments/ValleyoftheAncient2/
+backups/
+Packaged/

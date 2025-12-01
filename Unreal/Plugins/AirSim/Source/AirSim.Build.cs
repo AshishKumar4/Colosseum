@@ -64,6 +64,7 @@ public class AirSim : ModuleRules
                 break;
 
             case CompileMode.CppCompileWithRpc:
+                AddLibDependency("AirLib", Path.Combine(AirLibPath, "lib"), "AirLib", Target, false);
                 LoadAirSimDependency(Target, "rpclib", "rpc");
                 break;
 
@@ -77,6 +78,9 @@ public class AirSim : ModuleRules
     {
         //bEnforceIWYU = true; //to support 4.16
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
+        // UE 5.6: Use C++20 for RHI template compatibility
+        CppStandard = CppStandardVersion.Cpp20;
 
         bEnableExceptions = true;
 
@@ -112,6 +116,10 @@ public class AirSim : ModuleRules
             // needed when packaging
             PublicAdditionalLibraries.Add("stdc++");
             PublicAdditionalLibraries.Add("supc++");
+
+            // POSIX shared memory and semaphore support
+            PublicAdditionalLibraries.Add("pthread");
+            PublicAdditionalLibraries.Add("rt");
         }
     }
 

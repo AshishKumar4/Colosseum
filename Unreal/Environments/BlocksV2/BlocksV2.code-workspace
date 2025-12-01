@@ -1,0 +1,911 @@
+{
+	"folders": [
+		{
+			"name": "BlocksV2",
+			"path": "."
+		},
+		{
+			"name": "UE5",
+			"path": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+		}
+	],
+	"settings": {
+		"typescript.tsc.autoDetect": "off",
+		"npm.autoDetect": "off",
+		"terminal.integrated.env.linux": {
+			"PATH": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Binaries/ThirdParty/DotNet/8.0.300/linux-x64:${env:PATH}",
+			"DOTNET_ROOT": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Binaries/ThirdParty/DotNet/8.0.300/linux-x64",
+			"DOTNET_HOST_PATH": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Binaries/ThirdParty/DotNet/8.0.300/linux-x64/dotnet",
+			"DOTNET_MULTILEVEL_LOOKUP": "0",
+			"DOTNET_ROLL_FORWARD": "LatestMajor"
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-vscode.cpptools",
+			"ms-dotnettools.csharp"
+		]
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "BlocksV2 Linux Debug Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"Debug",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 Linux Debug Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"Debug",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BlocksV2 Linux Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 Linux Debug Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"Debug",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 Linux DebugGame Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"DebugGame",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 Linux DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"DebugGame",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BlocksV2 Linux DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 Linux DebugGame Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"DebugGame",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 Linux Development Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"Development",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 Linux Development Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"Development",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BlocksV2 Linux Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 Linux Development Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"Development",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 Linux Test Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"Test",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 Linux Test Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"Test",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BlocksV2 Linux Test Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 Linux Test Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"Test",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 Linux Shipping Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"Shipping",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 Linux Shipping Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"Shipping",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BlocksV2 Linux Shipping Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 Linux Shipping Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"Linux",
+					"Shipping",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 Debug Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"Debug",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 Debug Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"Debug",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BlocksV2 LinuxArm64 Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 Debug Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"Debug",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 DebugGame Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"DebugGame",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"DebugGame",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BlocksV2 LinuxArm64 DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 DebugGame Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"DebugGame",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 Development Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"Development",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 Development Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"Development",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BlocksV2 LinuxArm64 Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 Development Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"Development",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 Test Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"Test",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 Test Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"Test",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BlocksV2 LinuxArm64 Test Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 Test Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"Test",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 Shipping Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"Shipping",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 Shipping Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"Shipping",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BlocksV2 LinuxArm64 Shipping Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2 LinuxArm64 Shipping Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2",
+					"LinuxArm64",
+					"Shipping",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2Editor Linux Debug Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2Editor",
+					"Linux",
+					"Debug",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2Editor Linux Debug Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2Editor",
+					"Linux",
+					"Debug",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BlocksV2Editor Linux Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2Editor Linux Debug Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2Editor",
+					"Linux",
+					"Debug",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2Editor Linux DebugGame Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2Editor",
+					"Linux",
+					"DebugGame",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2Editor Linux DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2Editor",
+					"Linux",
+					"DebugGame",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BlocksV2Editor Linux DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2Editor Linux DebugGame Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2Editor",
+					"Linux",
+					"DebugGame",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2Editor Linux Development Build",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2Editor",
+					"Linux",
+					"Development",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2Editor Linux Development Rebuild",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2Editor",
+					"Linux",
+					"Development",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"BlocksV2Editor Linux Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"label": "BlocksV2Editor Linux Development Clean",
+				"group": "build",
+				"command": "Engine/Build/BatchFiles/Linux/Build.sh",
+				"args": [
+					"BlocksV2Editor",
+					"Linux",
+					"Development",
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-waitmutex",
+					"-clean"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			}
+		]
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Launch BlocksV2 (Debug)",
+				"request": "launch",
+				"program": "/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/Binaries/Linux/BlocksV2-Linux-Debug",
+				"preLaunchTask": "BlocksV2 Linux Debug Build",
+				"args": [
+				],
+				"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine",
+				"type": "cppdbg",
+				"visualizerFile": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true,
+				"sourceFileMap": {
+					"/UEVFS/BlocksV2": "/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2",
+					"/UEVFS/Root": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"name": "Launch BlocksV2 (DebugGame)",
+				"request": "launch",
+				"program": "/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/Binaries/Linux/BlocksV2-Linux-DebugGame",
+				"preLaunchTask": "BlocksV2 Linux DebugGame Build",
+				"args": [
+				],
+				"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine",
+				"type": "cppdbg",
+				"visualizerFile": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true,
+				"sourceFileMap": {
+					"/UEVFS/BlocksV2": "/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2",
+					"/UEVFS/Root": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"name": "Launch BlocksV2 (Development)",
+				"request": "launch",
+				"program": "/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/Binaries/Linux/BlocksV2",
+				"preLaunchTask": "BlocksV2 Linux Development Build",
+				"args": [
+				],
+				"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine",
+				"type": "cppdbg",
+				"visualizerFile": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true,
+				"sourceFileMap": {
+					"/UEVFS/BlocksV2": "/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2",
+					"/UEVFS/Root": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"name": "Launch BlocksV2 (Test)",
+				"request": "launch",
+				"program": "/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/Binaries/Linux/BlocksV2-Linux-Test",
+				"preLaunchTask": "BlocksV2 Linux Test Build",
+				"args": [
+				],
+				"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine",
+				"type": "cppdbg",
+				"visualizerFile": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true,
+				"sourceFileMap": {
+					"/UEVFS/BlocksV2": "/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2",
+					"/UEVFS/Root": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"name": "Launch BlocksV2 (Shipping)",
+				"request": "launch",
+				"program": "/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/Binaries/Linux/BlocksV2-Linux-Shipping",
+				"preLaunchTask": "BlocksV2 Linux Shipping Build",
+				"args": [
+				],
+				"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine",
+				"type": "cppdbg",
+				"visualizerFile": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true,
+				"sourceFileMap": {
+					"/UEVFS/BlocksV2": "/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2",
+					"/UEVFS/Root": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"name": "Launch BlocksV2Editor (Debug)",
+				"request": "launch",
+				"program": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Binaries/Linux/UnrealEditor-Linux-Debug",
+				"preLaunchTask": "BlocksV2Editor Linux Debug Build",
+				"args": [
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject"
+				],
+				"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine",
+				"type": "cppdbg",
+				"visualizerFile": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true,
+				"sourceFileMap": {
+					"/UEVFS/BlocksV2": "/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2",
+					"/UEVFS/Root": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"name": "Launch BlocksV2Editor (DebugGame)",
+				"request": "launch",
+				"program": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Binaries/Linux/UnrealEditor-Linux-DebugGame",
+				"preLaunchTask": "BlocksV2Editor Linux DebugGame Build",
+				"args": [
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject"
+				],
+				"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine",
+				"type": "cppdbg",
+				"visualizerFile": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true,
+				"sourceFileMap": {
+					"/UEVFS/BlocksV2": "/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2",
+					"/UEVFS/Root": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"name": "Launch BlocksV2Editor (Development)",
+				"request": "launch",
+				"program": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Binaries/Linux/UnrealEditor",
+				"preLaunchTask": "BlocksV2Editor Linux Development Build",
+				"args": [
+					"/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject"
+				],
+				"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine",
+				"type": "cppdbg",
+				"visualizerFile": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Extras/VisualStudioDebugging/Unreal.natvis",
+				"showDisplayString": true,
+				"sourceFileMap": {
+					"/UEVFS/BlocksV2": "/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2",
+					"/UEVFS/Root": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+				}
+			},
+			{
+				"name": "Generate Project Files",
+				"type": "coreclr",
+				"request": "launch",
+				"preLaunchTask": "UnrealBuildTool Linux Development Build",
+				"program": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Build/BatchFiles/RunUBT.bat",
+				"args": [
+					"-projectfiles",
+					"-vscode",
+					"-project=/home/mrwhite0racle/Desktop/UMDCourseWork/MSML642/project/Colosseum/Unreal/Environments/BlocksV2/BlocksV2.uproject",
+					"-game",
+					"-engine",
+					"-dotnet"
+				],
+				"env": {
+					"PATH": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Binaries/ThirdParty/DotNet/8.0.300/linux-x64:${env:PATH}",
+					"DOTNET_ROOT": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Binaries/ThirdParty/DotNet/8.0.300/linux-x64",
+					"DOTNET_HOST_PATH": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine/Engine/Binaries/ThirdParty/DotNet/8.0.300/linux-x64/dotnet",
+					"DOTNET_MULTILEVEL_LOOKUP": "0",
+					"DOTNET_ROLL_FORWARD": "LatestMajor"
+				},
+				"console": "internalConsole",
+				"internalConsoleOptions": "openOnSessionStart",
+				"stopAtEntry": false,
+				"cwd": "/ntfs-gen4-1tb/RoboticsProject/UnrealEngine"
+			}
+		]
+	}
+}

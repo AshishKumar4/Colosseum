@@ -288,7 +288,7 @@ private:
         }
     }
 
-    static bool CompressUsingImageWrapper(const TArray<uint8>& uncompressed, const int32 width, const int32 height, TArray<uint8>& compressed);
+    static bool CompressUsingImageWrapper(const TArray<FColor>& uncompressed_colors, const int32 width, const int32 height, TArray<uint8>& compressed);
 
 private:
     static bool log_messages_hidden_;

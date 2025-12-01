@@ -145,9 +145,9 @@ void UnrealImageCapture::addScreenCaptureHandler(UWorld* world)
                 TArray<FColor>& RefBitmap = const_cast<TArray<FColor>&>(Bitmap);
                 for (auto& Color : RefBitmap)
                     Color.A = 255;
-
-                TArray<uint8_t> last_compressed_png;
-                FImageUtils::CompressImageArray(SizeX, SizeY, RefBitmap, last_compressed_png);
+                TArrayView64<const FColor> SrcDataView(RefBitmap.GetData(), RefBitmap.Num());
+                TArray64<uint8> last_compressed_png;
+                FImageUtils::PNGCompressImageArray(SizeX, SizeY, SrcDataView, last_compressed_png);
                 last_compressed_png_ = std::vector<uint8_t>(last_compressed_png.GetData(), last_compressed_png.GetData() + last_compressed_png.Num());
             });
 

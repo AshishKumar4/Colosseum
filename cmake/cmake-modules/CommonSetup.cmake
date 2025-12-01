@@ -2,7 +2,21 @@
 
 macro(CommonTargetLink)
     target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
-    #target_link_libraries(c++abi)
+
+    # When using Unreal Engine's bundled clang/libc++ toolchain on Linux,
+    # we disable default libs and provide libc++/libc++abi manually via
+    # CMAKE_EXE_LINKER_FLAGS in build.sh. That places them before our
+    # object files and static libraries on the link line, which means
+    # they don't satisfy symbols coming from later static archives
+    # (MavLinkCom, AirLib, etc.).
+    #
+    # Adding the C++ runtime libraries here ensures they appear *after*
+    # all target objects and static libs for any executable that calls
+    # CommonTargetLink, so unresolved std:: symbols from those archives
+    # are resolved correctly while still using UE's libc++.
+    if(UNIX AND NOT APPLE)
+        target_link_libraries(${PROJECT_NAME} c++ c++abi m c gcc_s gcc pthread)
+    endif()
 endmacro(CommonTargetLink)
 
 macro(IncludeEigen)
@@ -57,9 +71,18 @@ macro(CommonSetup)
                 ${RPC_LIB_DEFINES} ${CMAKE_CXX_FLAGS}")
 
             if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
-                set(CMAKE_CXX_FLAGS "-stdlib=libc++ -Wno-documentation -Wno-unknown-warning-option ${CMAKE_CXX_FLAGS}")
+                # Don't add -stdlib=libc++ if it's already in CMAKE_CXX_FLAGS (from build.sh with UE toolchain)
+                if(NOT CMAKE_CXX_FLAGS MATCHES "-nostdinc\\+\\+")
+                    set(CMAKE_CXX_FLAGS "-stdlib=libc++ ${CMAKE_CXX_FLAGS}")
+                endif()
+                set(CMAKE_CXX_FLAGS "-Wno-documentation -Wno-unknown-warning-option ${CMAKE_CXX_FLAGS}")
                 find_package(LLVM REQUIRED CONFIG)
-                set(CXX_EXP_LIB "-L${LLVM_LIBRARY_DIRS} -lstdc++fs -ferror-limit=10")
+                # Only add stdc++fs if not using custom linker flags
+                if(NOT CMAKE_EXE_LINKER_FLAGS MATCHES "-nodefaultlibs")
+                    set(CXX_EXP_LIB "-L${LLVM_LIBRARY_DIRS} -lstdc++fs -ferror-limit=10")
+                else()
+                    set(CXX_EXP_LIB "-ferror-limit=10")
+                endif()
             else()
                 set(CXX_EXP_LIB "-lstdc++fs -fmax-errors=10 -Wnoexcept -Wstrict-null-sentinel")
             endif ()

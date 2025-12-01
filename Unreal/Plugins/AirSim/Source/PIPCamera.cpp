@@ -288,8 +288,9 @@ void APIPCamera::setCameraTypeEnabled(ImageType type, bool enabled)
 
 void APIPCamera::setCaptureUpdate(USceneCaptureComponent2D* capture, bool nodisplay)
 {
-    capture->bCaptureEveryFrame = !nodisplay;
-    capture->bCaptureOnMovement = !nodisplay;
+    // Use deferred capture only - prevents continuous rendering overhead
+    capture->bCaptureEveryFrame = false;
+    capture->bCaptureOnMovement = false;
     capture->bAlwaysPersistRenderingState = true;
 }
 
@@ -424,16 +425,27 @@ void APIPCamera::updateCaptureComponentSetting(USceneCaptureComponent2D* capture
                                                bool force_linear_gamma)
 {
     if (auto_format) {
-        render_target->InitAutoFormat(setting.width, setting.height); //256 X 144, X 480
+        render_target->InitAutoFormat(setting.width, setting.height);
     }
     else {
         render_target->InitCustomFormat(setting.width, setting.height, pixel_format, force_linear_gamma);
     }
 
+    // Performance optimizations for render target
+    render_target->bAutoGenerateMips = false;  // Disable mip generation
+    render_target->bCanCreateUAV = false;  // Not needed for capture
+    render_target->bGPUSharedFlag = false;  // Reduce overhead
+    render_target->UpdateResourceImmediate(false);  // Async update
+
     if (!std::isnan(setting.target_gamma))
         render_target->TargetGamma = setting.target_gamma;
 
     capture->ProjectionType = static_cast<ECameraProjectionMode::Type>(setting.projection_mode);
+
+    // Performance optimizations for capture component
+    capture->bUseRayTracingIfEnabled = false;  // Disable ray tracing overhead
+    capture->CompositeMode = SCCM_Overwrite;  // Direct overwrite is fastest
+    capture->MaxViewDistanceOverride = setting.width * 100;  // Limit draw distance based on resolution
 
     if (!std::isnan(setting.fov_degrees))
         capture->FOVAngle = setting.fov_degrees;
